@@ -1,0 +1,440 @@
+/* Variables CSS para consistencia y fácil mantenimiento */
+:root {
+    --primary-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    --accent-color: #fbbf24;
+    --success-color: #10b981;
+    --info-color: #3b82f6;
+    --cyan-color: #06b6d4;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --purple-color: #8b5cf6;
+    
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+    --box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    
+    --border-radius: 25px;
+    --border-radius-small: 15px;
+    --border-radius-tiny: 10px;
+    
+    --transition: all 0.4s ease;
+}
+
+/* Reset y estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: var(--primary-gradient);
+    color: white;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border-radius: var(--border-radius);
+    padding: 40px;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--glass-border);
+}
+
+/* Título principal */
+h1 {
+    text-align: center;
+    font-size: 3em;
+    margin-bottom: 50px;
+    text-shadow: var(--text-shadow);
+    background: linear-gradient(45deg, var(--accent-color), #f59e0b, #d97706);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Flujo del ciclo */
+.cycle-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.phase-container {
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+}
+
+/* Estilos de fases */
+.phase {
+    padding: 30px 40px;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.4em;
+    transition: var(--transition);
+    cursor: pointer;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.phase::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.phase:hover::before {
+    animation: shimmer 1.5s ease-in-out;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+}
+
+.phase:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* Colores específicos para cada fase */
+.captacion {
+    background: linear-gradient(135deg, var(--success-color), #059669, #047857);
+    border: 2px solid #34d399;
+}
+
+.decodificar {
+    background: linear-gradient(135deg, var(--info-color), #2563eb, #1d4ed8);
+    border: 2px solid #60a5fa;
+    clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
+    padding: 35px 60px;
+}
+
+.ejecucion {
+    background: linear-gradient(135deg, var(--cyan-color), #0891b2, #0e7490);
+    border: 2px solid #22d3ee;
+}
+
+/* Flechas de flujo */
+.flow-arrow {
+    font-size: 3em;
+    color: var(--accent-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    animation: bounce 2s infinite;
+    filter: drop-shadow(0 0 10px var(--accent-color));
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+/* Números de fase */
+.phase-number {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    margin-right: 15px;
+    font-size: 1.2em;
+}
+
+/* Detalles de fase */
+.phase-details {
+    margin-top: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--border-radius-small);
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+}
+
+/* Grid de pasos */
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.step-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: var(--border-radius-tiny);
+    border-left: 4px solid var(--accent-color);
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.step-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+    border-left-color: #22d3ee;
+    border-left-width: 6px;
+}
+
+/* Sección de ejecución */
+.execution-section {
+    margin-top: 40px;
+    background: rgba(6, 182, 212, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    border: 2px solid rgba(6, 182, 212, 0.3);
+}
+
+/* Categorías de instrucciones */
+.instruction-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 30px;
+    margin-top: 25px;
+}
+
+.category-card {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: var(--border-radius-small);
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Títulos de categoría */
+.category-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mov-category .category-title { 
+    color: var(--success-color); 
+    border-color: var(--success-color);
+}
+
+.arithmetic-category .category-title { 
+    color: var(--warning-color); 
+    border-color: var(--warning-color);
+}
+
+.control-category .category-title { 
+    color: var(--danger-color); 
+    border-color: var(--danger-color);
+}
+
+/* Tipos de instrucción */
+.instruction-type {
+    margin: 15px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-tiny);
+    border-left: 3px solid #6366f1;
+}
+
+.instruction-type h4 {
+    color: #a78bfa;
+    margin: 0 0 10px 0;
+    font-size: 1.1em;
+}
+
+/* Código de instrucción */
+.instruction-code {
+    font-family: 'Courier New', monospace;
+    color: #fde68a;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 12px;
+    border-radius: 5px;
+    margin: 8px 0;
+    font-size: 0.9em;
+    border: 1px solid rgba(253, 230, 138, 0.3);
+}
+
+/* Pasos de instrucción */
+.instruction-steps {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.instruction-steps li {
+    background: rgba(255, 255, 255, 0.08);
+    margin: 5px 0;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    border-left: 2px solid #22d3ee;
+}
+
+/* Notas */
+.note {
+    background: rgba(251, 191, 36, 0.2);
+    border: 1px solid var(--accent-color);
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin: 10px 0;
+    font-size: 0.9em;
+    color: #fde68a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.note::before {
+    content: "💡";
+    font-size: 1.2em;
+    flex-shrink: 0;
+}
+
+/* Elementos condicionales */
+.conditional-list {
+    margin: 10px 0;
+}
+
+.conditional-item {
+    background: rgba(139, 92, 246, 0.2);
+    margin: 8px 0;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border-left: 3px solid var(--purple-color);
+    font-family: 'Courier New', monospace;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    h1 {
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+    
+    .phase {
+        font-size: 1.1em;
+        padding: 20px 25px;
+    }
+    
+    .decodificar {
+        clip-path: none;
+        padding: 25px 35px;
+    }
+    
+    .instruction-categories {
+        grid-template-columns: 1fr;
+    }
+    
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .category-card {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 15px;
+        border-radius: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    .phase {
+        font-size: 1em;
+        padding: 15px 20px;
+    }
+    
+    .phase-number {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 1em;
+        margin-right: 10px;
+    }
+    
+    .flow-arrow {
+        font-size: 2em;
+    }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus states para accesibilidad */
+.phase:focus,
+.step-item:focus,
+.category-card:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .container {
+        background: white;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    .phase {
+        background: #f0f0f0 !important;
+        color: black !important;
+        border: 1px solid #ccc !important;
+    }
+}
