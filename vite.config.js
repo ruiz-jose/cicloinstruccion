@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // Base para GitHub Pages - cambiar por tu repositorio
+  // Base para GitHub Pages - repositorio de ruiz-jose
   base: '/cicloinstruccion/',
   
   // Configuración de build

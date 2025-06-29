@@ -14,10 +14,10 @@
   ],
   "author": "Proyecto Arquitectura de Computadores",
   "license": "MIT",
-  "homepage": "https://tu-usuario.github.io/cicloinstruccion",
+  "homepage": "https://ruiz-jose.github.io/cicloinstruccion",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tu-usuario/cicloinstruccion.git"
+    "url": "git+https://github.com/ruiz-jose/cicloinstruccion.git"
   },
   "scripts": {
     "dev": "vite",
