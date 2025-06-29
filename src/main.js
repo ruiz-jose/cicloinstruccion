@@ -1307,3 +1307,330 @@ document.addEventListener('DOMContentLoaded', () => {
         window.cpuSimulator = new CPUSimulator();
     }
 });
+
+/**
+ * Sistema de interacciones para la secuencia FETCH
+ */
+class FetchSequenceSystem {
+    constructor() {
+        this.currentStep = 0;
+        this.isAnimating = false;
+        this.autoPlayInterval = null;
+        this.init();
+    }
+
+    init() {
+        this.setupSequenceInteractions();
+        this.setupAutoHighlight();
+        this.setupStepNavigation();
+    }
+
+    setupSequenceInteractions() {
+        const sequenceSteps = document.querySelectorAll('.sequence-step');
+        
+        sequenceSteps.forEach((step, index) => {
+            // Hover effects mejorados
+            step.addEventListener('mouseenter', () => {
+                this.highlightStep(index);
+                this.showStepDetails(index);
+            });
+            
+            step.addEventListener('mouseleave', () => {
+                if (!this.isAnimating) {
+                    this.resetHighlight();
+                }
+            });
+            
+            // Click para enfocar paso
+            step.addEventListener('click', () => {
+                this.focusOnStep(index);
+            });
+            
+            // Accesibilidad
+            step.setAttribute('tabindex', '0');
+            step.setAttribute('role', 'button');
+            step.setAttribute('aria-label', `Paso ${index + 1} de la secuencia FETCH`);
+            
+            step.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.focusOnStep(index);
+                }
+            });
+        });
+    }
+
+    setupAutoHighlight() {
+        // Auto-highlight secuencial cada 3 segundos
+        const startAutoPlay = () => {
+            this.stopAutoPlay();
+            this.autoPlayInterval = setInterval(() => {
+                this.nextStep();
+            }, 3000);
+        };
+
+        // Iniciar después de 2 segundos
+        setTimeout(startAutoPlay, 2000);
+        
+        // Pausar en hover sobre la secuencia
+        const fetchSequence = document.querySelector('.fetch-sequence');
+        if (fetchSequence) {
+            fetchSequence.addEventListener('mouseenter', () => this.stopAutoPlay());
+            fetchSequence.addEventListener('mouseleave', startAutoPlay);
+        }
+    }
+
+    setupStepNavigation() {
+        // Navegación con teclado (flechas)
+        document.addEventListener('keydown', (e) => {
+            const fetchSection = document.querySelector('.phase-container[data-phase="fetch"]');
+            if (!fetchSection || !Utils.isInViewport(fetchSection)) return;
+
+            switch (e.key) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    e.preventDefault();
+                    this.nextStep();
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    e.preventDefault();
+                    this.previousStep();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    this.goToStep(0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    this.goToStep(2);
+                    break;
+            }
+        });
+    }
+
+    highlightStep(stepIndex) {
+        const steps = document.querySelectorAll('.sequence-step');
+        
+        steps.forEach((step, index) => {
+            step.classList.remove('highlighted', 'active', 'completed');
+            
+            if (index === stepIndex) {
+                step.classList.add('highlighted', 'active');
+                this.animateStepComponents(step);
+            } else if (index < stepIndex) {
+                step.classList.add('completed');
+            }
+        });
+
+        this.highlightSequenceArrows(stepIndex);
+        this.currentStep = stepIndex;
+    }
+
+    animateStepComponents(step) {
+        const components = step.querySelectorAll('.component');
+        const transferArrow = step.querySelector('.transfer-arrow');
+        
+        // Reset previous animations
+        components.forEach(comp => {
+            comp.style.animation = '';
+            comp.style.transform = '';
+        });
+        
+        if (transferArrow) {
+            transferArrow.style.animation = '';
+        }
+        
+        // Animate source component
+        setTimeout(() => {
+            const sourceComp = step.querySelector('.component.from');
+            if (sourceComp) {
+                sourceComp.style.animation = 'pulse 0.8s ease-in-out';
+                sourceComp.style.transform = 'scale(1.1)';
+            }
+        }, 200);
+        
+        // Animate transfer arrow
+        setTimeout(() => {
+            if (transferArrow) {
+                transferArrow.style.animation = 'pulse 0.6s ease-in-out infinite';
+            }
+        }, 600);
+        
+        // Animate destination component
+        setTimeout(() => {
+            const destComp = step.querySelector('.component.to');
+            if (destComp) {
+                destComp.style.animation = 'pulse 0.8s ease-in-out';
+                destComp.style.transform = 'scale(1.1)';
+            }
+        }, 1000);
+        
+        // Reset animations
+        setTimeout(() => {
+            components.forEach(comp => {
+                comp.style.animation = '';
+                comp.style.transform = '';
+            });
+            if (transferArrow) {
+                transferArrow.style.animation = 'pulse 2s infinite';
+            }
+        }, 2000);
+    }
+
+    highlightSequenceArrows(currentStep) {
+        const arrows = document.querySelectorAll('.sequence-arrow');
+        
+        arrows.forEach((arrow, index) => {
+            arrow.classList.remove('active', 'completed');
+            
+            if (index === currentStep && currentStep < 2) {
+                arrow.classList.add('active');
+                this.animateArrow(arrow);
+            } else if (index < currentStep) {
+                arrow.classList.add('completed');
+            }
+        });
+    }
+
+    animateArrow(arrow) {
+        const arrowLine = arrow.querySelector('.arrow-line');
+        const arrowHead = arrow.querySelector('.arrow-head');
+        
+        if (arrowLine) {
+            arrowLine.style.animation = 'none';
+            arrowLine.offsetHeight; // Force reflow
+            arrowLine.style.animation = 'flow 1.5s ease-in-out';
+        }
+        
+        if (arrowHead) {
+            arrowHead.style.animation = 'bounce 1s ease-in-out';
+        }
+    }
+
+    showStepDetails(stepIndex) {
+        const stepData = [
+            {
+                title: "Preparación de Dirección",
+                detail: "El Contador de Programa (IP/PC) contiene la dirección de la próxima instrucción a ejecutar. Esta dirección se copia al Registro de Dirección de Memoria (MAR) para preparar el acceso a memoria.",
+                time: "1 ciclo de reloj",
+                registers: ["IP/PC", "MAR"]
+            },
+            {
+                title: "Acceso a Memoria",
+                detail: "La CPU envía la dirección del MAR al bus de direcciones y activa la señal de lectura. La memoria responde enviando el contenido de esa dirección al Registro de Buffer de Memoria (MBR).",
+                time: "1-3 ciclos de reloj",
+                registers: ["MAR", "MBR", "IP/PC"]
+            },
+            {
+                title: "Carga de Instrucción",
+                detail: "La instrucción leída se transfiere desde el MBR al Registro de Instrucción (IR), donde quedará disponible para la siguiente fase de decodificación.",
+                time: "1 ciclo de reloj",
+                registers: ["MBR", "IR"]
+            }
+        ];
+
+        const data = stepData[stepIndex];
+        if (data) {
+            this.updateStepInfoPanel(data);
+        }
+    }
+
+    updateStepInfoPanel(data) {
+        // Crear o actualizar panel de información flotante
+        let infoPanel = document.querySelector('.step-info-panel');
+        
+        if (!infoPanel) {
+            infoPanel = document.createElement('div');
+            infoPanel.className = 'step-info-panel';
+            document.body.appendChild(infoPanel);
+        }
+        
+        infoPanel.innerHTML = `
+            <div class="info-header">
+                <h4>${data.title}</h4>
+                <button class="close-btn" onclick="this.parentElement.parentElement.remove()">×</button>
+            </div>
+            <div class="info-content">
+                <p>${data.detail}</p>
+                <div class="info-stats">
+                    <div class="stat">
+                        <span class="label">Tiempo:</span>
+                        <span class="value">${data.time}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Registros:</span>
+                        <span class="value">${data.registers.join(', ')}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        infoPanel.style.display = 'block';
+        infoPanel.style.animation = 'slideInRight 0.3s ease-out';
+    }
+
+    focusOnStep(stepIndex) {
+        this.stopAutoPlay();
+        this.isAnimating = true;
+        
+        this.highlightStep(stepIndex);
+        this.showStepDetails(stepIndex);
+        
+        // Scroll suave al paso
+        const step = document.querySelectorAll('.sequence-step')[stepIndex];
+        if (step) {
+            step.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+        
+        setTimeout(() => {
+            this.isAnimating = false;
+        }, 1000);
+    }
+
+    nextStep() {
+        const nextStep = (this.currentStep + 1) % 3;
+        this.highlightStep(nextStep);
+    }
+
+    previousStep() {
+        const prevStep = this.currentStep === 0 ? 2 : this.currentStep - 1;
+        this.highlightStep(prevStep);
+    }
+
+    goToStep(stepIndex) {
+        if (stepIndex >= 0 && stepIndex <= 2) {
+            this.highlightStep(stepIndex);
+        }
+    }
+
+    resetHighlight() {
+        const steps = document.querySelectorAll('.sequence-step');
+        const arrows = document.querySelectorAll('.sequence-arrow');
+        
+        steps.forEach(step => {
+            step.classList.remove('highlighted', 'active', 'completed');
+        });
+        
+        arrows.forEach(arrow => {
+            arrow.classList.remove('active', 'completed');
+        });
+    }
+
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+}
+
+// Inicializar sistema de secuencia FETCH cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.querySelector('.fetch-sequence')) {
+        window.fetchSequenceSystem = new FetchSequenceSystem();
+    }
+});

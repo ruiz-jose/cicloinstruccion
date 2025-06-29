@@ -106,34 +106,143 @@
                     
                     <div class="phase-details">
                         <div class="details-header">
-                            <h4>Pasos de Ejecución</h4>
+                            <h4>Secuencia de Captación</h4>
+                            <span class="sequence-badge">3 pasos secuenciales</span>
                         </div>
-                        <div class="steps-grid">
-                            <div class="step-item">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <strong>MAR ← IP</strong>
-                                    <p>Cargar dirección de instrucción</p>
+                        
+                        <div class="fetch-sequence">
+                            <!-- Paso 1 -->
+                            <div class="sequence-step" data-step="1">
+                                <div class="step-header">
+                                    <div class="step-number-large">1</div>
+                                    <div class="step-info">
+                                        <h5 class="step-title">Preparar Dirección</h5>
+                                        <span class="step-prereq">Punto de inicio</span>
+                                    </div>
+                                    <div class="step-status">
+                                        <span class="status-icon">🎯</span>
+                                    </div>
+                                </div>
+                                <div class="step-operation">
+                                    <div class="operation-code">MAR ← IP</div>
+                                    <div class="operation-desc">
+                                        Cargar la dirección de la próxima instrucción desde el Contador de Programa al Registro de Dirección de Memoria
+                                    </div>
+                                </div>
+                                <div class="step-components">
+                                    <div class="component from">
+                                        <span class="comp-label">IP/PC</span>
+                                        <span class="comp-value">0x1000</span>
+                                    </div>
+                                    <div class="transfer-arrow">→</div>
+                                    <div class="component to">
+                                        <span class="comp-label">MAR</span>
+                                        <span class="comp-value">0x1000</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="step-item">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <strong>MBR ← read(Memoria[MAR])</strong>
-                                    <p>Leer instrucción e incrementar IP</p>
+                            
+                            <!-- Flecha de secuencia -->
+                            <div class="sequence-arrow">
+                                <div class="arrow-line"></div>
+                                <div class="arrow-head">▼</div>
+                                <div class="arrow-label">Requiere paso 1</div>
+                            </div>
+                            
+                            <!-- Paso 2 -->
+                            <div class="sequence-step" data-step="2">
+                                <div class="step-header">
+                                    <div class="step-number-large">2</div>
+                                    <div class="step-info">
+                                        <h5 class="step-title">Acceso a Memoria</h5>
+                                        <span class="step-prereq">Depende del paso 1</span>
+                                    </div>
+                                    <div class="step-status">
+                                        <span class="status-icon">📥</span>
+                                    </div>
+                                </div>
+                                <div class="step-operation">
+                                    <div class="operation-code">MBR ← read(Memoria[MAR])</div>
+                                    <div class="operation-desc">
+                                        Leer el contenido de la memoria en la dirección especificada por MAR y almacenarlo en el Registro de Buffer de Memoria
+                                    </div>
+                                </div>
+                                <div class="step-components">
+                                    <div class="component from">
+                                        <span class="comp-label">Memoria[MAR]</span>
+                                        <span class="comp-value">0x8B45</span>
+                                    </div>
+                                    <div class="transfer-arrow">→</div>
+                                    <div class="component to">
+                                        <span class="comp-label">MBR</span>
+                                        <span class="comp-value">0x8B45</span>
+                                    </div>
+                                </div>
+                                <div class="step-side-effect">
+                                    <span class="effect-icon">⚡</span>
+                                    <span class="effect-text">IP ← IP + 1 (incrementar contador)</span>
                                 </div>
                             </div>
-                            <div class="step-item">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <strong>IR ← MBR</strong>
-                                    <p>Transferir a registro de instrucción</p>
+                            
+                            <!-- Flecha de secuencia -->
+                            <div class="sequence-arrow">
+                                <div class="arrow-line"></div>
+                                <div class="arrow-head">▼</div>
+                                <div class="arrow-label">Requiere paso 2</div>
+                            </div>
+                            
+                            <!-- Paso 3 -->
+                            <div class="sequence-step" data-step="3">
+                                <div class="step-header">
+                                    <div class="step-number-large">3</div>
+                                    <div class="step-info">
+                                        <h5 class="step-title">Cargar Instrucción</h5>
+                                        <span class="step-prereq">Depende del paso 2</span>
+                                    </div>
+                                    <div class="step-status">
+                                        <span class="status-icon">📋</span>
+                                    </div>
+                                </div>
+                                <div class="step-operation">
+                                    <div class="operation-code">IR ← MBR</div>
+                                    <div class="operation-desc">
+                                        Transferir la instrucción desde el Buffer de Memoria al Registro de Instrucción para su posterior decodificación
+                                    </div>
+                                </div>
+                                <div class="step-components">
+                                    <div class="component from">
+                                        <span class="comp-label">MBR</span>
+                                        <span class="comp-value">0x8B45</span>
+                                    </div>
+                                    <div class="transfer-arrow">→</div>
+                                    <div class="component to">
+                                        <span class="comp-label">IR</span>
+                                        <span class="comp-value">0x8B45</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="phase-note">
-                            <span class="note-icon">💡</span>
-                            La instrucción queda lista para ser analizada
+                        
+                        <div class="phase-completion">
+                            <div class="completion-icon">✅</div>
+                            <div class="completion-text">
+                                <strong>Resultado:</strong> La instrucción está lista para la fase de decodificación
+                            </div>
+                        </div>
+                        
+                        <div class="fetch-summary">
+                            <div class="summary-item">
+                                <span class="summary-label">Tiempo:</span>
+                                <span class="summary-value">3 ciclos de reloj</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Accesos a memoria:</span>
+                                <span class="summary-value">1 lectura</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Registros modificados:</span>
+                                <span class="summary-value">MAR, MBR, IR, IP</span>
+                            </div>
                         </div>
                     </div>
                 </div>
