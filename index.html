@@ -5,71 +5,231 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Diagrama interactivo del ciclo de instrucción de CPU - Material educativo de arquitectura de computadores">
     <meta name="keywords" content="ciclo instrucción, CPU, arquitectura computadores, fetch, decode, execute">
-    <meta name="author" content="Proyecto Arquitectura de Computadores">
-    <link rel="icon" type="image/svg+xml" href="/cpu-icon.svg" />
+    <meta name="author" content="José Ruiz - Arquitectura de Computadores">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔄</text></svg>" />
     <title>Diagrama Ciclo de Instrucción - Arquitectura de Computadores</title>
     <link rel="stylesheet" href="/src/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>🔄 CICLO DE INSTRUCCIÓN</h1>
-        
-        <div class="cycle-flow">
-            <!-- CAPTACIÓN -->
-            <div class="phase-container">
-                <div class="phase captacion">
-                    <span class="phase-number">1</span>
-                    🎯 CAPTACIÓN (FETCH)
-                </div>
-                <div class="phase-details">
-                    <div class="steps-grid">
-                        <div class="step-item">
-                            <strong>Paso 1:</strong> MAR ← IP
-                        </div>
-                        <div class="step-item">
-                            <strong>Paso 2:</strong> MBR ← read(Memoria[MAR]) ; IP ← IP + 1
-                        </div>
-                        <div class="step-item">
-                            <strong>Paso 3:</strong> IR ← MBR
-                        </div>
-                    </div>
-                    <div class="note">
-                        Obtener la instrucción de memoria y cargarla en el registro IR
-                    </div>
-                </div>
+    <!-- Header profesional -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🔄</span>
+                <span class="brand-text">Ciclo de Instrucción</span>
             </div>
-            
-            <div class="flow-arrow">⬇</div>
-            
-            <!-- DECODIFICAR -->
-            <div class="phase-container">
-                <div class="phase decodificar">
-                    <span class="phase-number">2</span>
-                    🔍 DECODIFICAR
-                </div>
-                <div class="phase-details">
-                    <p style="text-align: center; font-size: 1.1em; margin-bottom: 20px;">
-                        La unidad de control analiza la instrucción del IR
-                    </p>
-                    <div class="steps-grid">
-                        <div class="step-item">Determinar tipo de operación</div>
-                        <div class="step-item">Identificar operandos</div>
-                        <div class="step-item">Analizar modo de direccionamiento</div>
-                        <div class="step-item">Generar señales de control</div>
-                    </div>
-                </div>
+            <div class="nav-links">
+                <a href="#overview" class="nav-link">Resumen</a>
+                <a href="#phases" class="nav-link">Fases</a>
+                <a href="#instructions" class="nav-link">Instrucciones</a>
+                <a href="https://github.com/ruiz-jose/cicloinstruccion" class="nav-link github-link" target="_blank">
+                    <span class="github-icon">⚡</span>
+                    Código
+                </a>
             </div>
-            
-            <div class="flow-arrow">⬇</div>
-            
-            <!-- EJECUCIÓN -->
-            <div class="phase-container">
-                <div class="phase ejecucion">
-                    <span class="phase-number">3</span>
-                    ⚡ EJECUCIÓN
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="overview" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-text">Arquitectura de Computadores</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="title-gradient">Ciclo de Instrucción</span>
+                <span class="title-subtitle">de CPU</span>
+            </h1>
+            <p class="hero-description">
+                Explora de manera interactiva las tres fases fundamentales del procesamiento de instrucciones: 
+                <strong>Captación</strong>, <strong>Decodificación</strong> y <strong>Ejecución</strong>
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">Fases</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">12+</span>
+                    <span class="stat-label">Tipos de Instrucciones</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Interactivo</span>
                 </div>
             </div>
         </div>
+        <div class="hero-visual">
+            <div class="floating-card">
+                <div class="card-content">
+                    <div class="mini-cpu">
+                        <div class="cpu-core"></div>
+                        <div class="cpu-cache"></div>
+                        <div class="cpu-memory"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Phases Section -->
+        <section id="phases" class="phases-section">
+            <div class="section-header">
+                <h2 class="section-title">Fases del Ciclo</h2>
+                <p class="section-description">
+                    Cada instrucción pasa por estas tres etapas fundamentales
+                </p>
+            </div>
+
+            <div class="cycle-flow">
+                <!-- CAPTACIÓN -->
+                <div class="phase-container" data-phase="fetch">
+                    <div class="phase captacion">
+                        <div class="phase-header">
+                            <span class="phase-number">01</span>
+                            <div class="phase-info">
+                                <h3 class="phase-title">Captación</h3>
+                                <span class="phase-subtitle">FETCH</span>
+                            </div>
+                            <div class="phase-icon">🎯</div>
+                        </div>
+                        <div class="phase-summary">
+                            Obtener la instrucción desde la memoria principal
+                        </div>
+                    </div>
+                    
+                    <div class="phase-details">
+                        <div class="details-header">
+                            <h4>Pasos de Ejecución</h4>
+                        </div>
+                        <div class="steps-grid">
+                            <div class="step-item">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <strong>MAR ← IP</strong>
+                                    <p>Cargar dirección de instrucción</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <strong>MBR ← read(Memoria[MAR])</strong>
+                                    <p>Leer instrucción e incrementar IP</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <strong>IR ← MBR</strong>
+                                    <p>Transferir a registro de instrucción</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="phase-note">
+                            <span class="note-icon">💡</span>
+                            La instrucción queda lista para ser analizada
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head">▼</div>
+                </div>
+                
+                <!-- DECODIFICAR -->
+                <div class="phase-container" data-phase="decode">
+                    <div class="phase decodificar">
+                        <div class="phase-header">
+                            <span class="phase-number">02</span>
+                            <div class="phase-info">
+                                <h3 class="phase-title">Decodificación</h3>
+                                <span class="phase-subtitle">DECODE</span>
+                            </div>
+                            <div class="phase-icon">🔍</div>
+                        </div>
+                        <div class="phase-summary">
+                            Analizar e interpretar la instrucción obtenida
+                        </div>
+                    </div>
+                    
+                    <div class="phase-details">
+                        <div class="details-header">
+                            <h4>Proceso de Análisis</h4>
+                        </div>
+                        <div class="decode-grid">
+                            <div class="decode-item">
+                                <div class="decode-icon">🎯</div>
+                                <h5>Tipo de Operación</h5>
+                                <p>Identificar si es MOV, ADD, JMP, etc.</p>
+                            </div>
+                            <div class="decode-item">
+                                <div class="decode-icon">📍</div>
+                                <h5>Operandos</h5>
+                                <p>Determinar registros o direcciones</p>
+                            </div>
+                            <div class="decode-item">
+                                <div class="decode-icon">🔗</div>
+                                <h5>Modo de Direccionamiento</h5>
+                                <p>Directo, indirecto, inmediato</p>
+                            </div>
+                            <div class="decode-item">
+                                <div class="decode-icon">⚡</div>
+                                <h5>Señales de Control</h5>
+                                <p>Preparar rutas de datos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head">▼</div>
+                </div>
+                
+                <!-- EJECUCIÓN -->
+                <div class="phase-container" data-phase="execute">
+                    <div class="phase ejecucion">
+                        <div class="phase-header">
+                            <span class="phase-number">03</span>
+                            <div class="phase-info">
+                                <h3 class="phase-title">Ejecución</h3>
+                                <span class="phase-subtitle">EXECUTE</span>
+                            </div>
+                            <div class="phase-icon">⚡</div>
+                        </div>
+                        <div class="phase-summary">
+                            Realizar la operación especificada por la instrucción
+                        </div>
+                    </div>
+                    
+                    <div class="phase-details">
+                        <div class="details-header">
+                            <h4>Tipos de Ejecución</h4>
+                        </div>
+                        <div class="execution-preview">
+                            <div class="exec-type">
+                                <span class="exec-icon">📋</span>
+                                <span>Transferencias</span>
+                            </div>
+                            <div class="exec-type">
+                                <span class="exec-icon">🧮</span>
+                                <span>Aritmética</span>
+                            </div>
+                            <div class="exec-type">
+                                <span class="exec-icon">🎮</span>
+                                <span>Control</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         
         <!-- DETALLES DE EJECUCIÓN -->
         <div class="execution-section">
@@ -96,6 +256,9 @@
                         <h4>Directo a Registro</h4>
                         <div class="instruction-code">MOV Rx, [dirección]</div>
                         <ul class="instruction-steps">
+                            <li><strong>Paso 4:</strong> MAR ← IP </li>
+                            <li><strong>Paso 5:</strong> MBR ← read(Memoria[MAR]); IP ← IP + 1 </li>
+                            <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
                             <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
                             <li><strong>Paso 6:</strong> MAR ← MBR</li>
                             <li><strong>Paso 7:</strong> MBR ← read(Memoria[MAR])</li>
@@ -121,16 +284,16 @@
                             <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
                             <li><strong>Paso 6:</strong> Rx ← MBR</li>
                         </ul>
-                        <div class="note">Destino puede ser MY o BL</div>
+                        <div class="note">Destino puede ser [M] o BL</div>
                     </div>
                     
                     <div class="instruction-type">
                         <h4>Indirecto</h4>
-                        <div class="instruction-code">MOV Rx, [Ry]</div>
+                        <div class="instruction-code">MOV Rx, [BL]</div>
                         <ul class="instruction-steps">
-                            <li><strong>Paso 6:</strong> MAR ← BL</li>
-                            <li><strong>Paso 7:</strong> MBR ← read(Memoria[MAR])</li>
-                            <li><strong>Paso 8:</strong> Rx ← MBR</li>
+                            <li><strong>Paso 4:</strong> MAR ← BL</li>
+                            <li><strong>Paso 5:</strong> MBR ← read(Memoria[MAR])</li>
+                            <li><strong>Paso 6:</strong> Rx ← MBR</li>
                         </ul>
                     </div>
                 </div>
@@ -147,7 +310,7 @@
                         <h4>Entre Registros</h4>
                         <div class="instruction-code">ADD Rx, Ry</div>
                         <ul class="instruction-steps">
-                            <li><strong>Paso 4:</strong> Rx ← opALU Ry ; update(Flags)</li>
+                            <li><strong>Paso 4:</strong> Rx ← Rx opALU Ry ; update(Flags)</li>
                         </ul>
                     </div>
                     
@@ -158,7 +321,7 @@
                             <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
                             <li><strong>Paso 6:</strong> MAR ← MBR</li>
                             <li><strong>Paso 7:</strong> MBR ← read(Memoria[MAR])</li>
-                            <li><strong>Paso 8:</strong> Rx ← opALU MBR ; update(Flags)</li>
+                            <li><strong>Paso 8:</strong> Rx ← Rx opALU MBR ; update(Flags)</li>
                         </ul>
                         <div class="note">y viceversa</div>
                     </div>
@@ -170,16 +333,16 @@
                             <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
                             <li><strong>Paso 6:</strong> Rx ← opALU MBR ; update(Flags)</li>
                         </ul>
-                        <div class="note">Destino puede ser MY o BL</div>
+                        <div class="note">Destino puede ser [M] o BL</div>
                     </div>
                     
                     <div class="instruction-type">
                         <h4>Indirecto</h4>
-                        <div class="instruction-code">ADD Rx, [Ry]</div>
+                        <div class="instruction-code">ADD Rx, [BL]</div>
                         <ul class="instruction-steps">
-                            <li><strong>Paso 6:</strong> MAR ← BL</li>
-                            <li><strong>Paso 7:</strong> MBR ← read(Memoria[MAR])</li>
-                            <li><strong>Paso 8:</strong> Rx ← opALU MBR ; update(Flags)</li>
+                            <li><strong>Paso 4:</strong> MAR ← BL</li>
+                            <li><strong>Paso 5:</strong> MBR ← read(Memoria[MAR])</li>
+                            <li><strong>Paso 6:</strong> Rx ← Rx opALU MBR ; update(Flags)</li>
                         </ul>
                     </div>
                 </div>
@@ -241,7 +404,424 @@
                 </div>
             </div>
         </div>
-    </div>
+        
+        <!-- Instructions Section -->
+        <section id="instructions" class="instructions-section">
+            <div class="section-header">
+                <h2 class="section-title">Tipos de Instrucciones</h2>
+                <p class="section-description">
+                    Detalle completo de cada categoría de instrucciones y sus variantes
+                </p>
+            </div>
+            
+            <div class="instruction-categories">
+                <!-- TRANSFERENCIAS MOV -->
+                <div class="category-card mov-category">
+                    <div class="category-header">
+                        <div class="category-icon">📋</div>
+                        <div class="category-info">
+                            <h3 class="category-title">Transferencias</h3>
+                            <span class="category-subtitle">MOV - Movimiento de Datos</span>
+                        </div>
+                        <div class="category-badge">5 tipos</div>
+                    </div>
+                    
+                    <div class="instruction-types">
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>Entre Registros</h4>
+                                <div class="complexity-badge simple">Simple</div>
+                            </div>
+                            <div class="instruction-code">MOV Rx, Ry</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Paso 4:</span>
+                                    <span class="step-code">Rx ← Ry</span>
+                                </div>
+                            </div>
+                            <div class="instruction-visual">
+                                <div class="reg-box">Ry</div>
+                                <div class="arrow-small">→</div>
+                                <div class="reg-box">Rx</div>
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>Directo a Registro</h4>
+                                <div class="complexity-badge medium">Medio</div>
+                            </div>
+                            <div class="instruction-code">MOV Rx, [dirección]</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Pasos 4-5:</span>
+                                    <span class="step-code">Obtener segundo byte</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 6:</span>
+                                    <span class="step-code">MAR ← MBR</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 7:</span>
+                                    <span class="step-code">MBR ← read(Memoria[MAR])</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 8:</span>
+                                    <span class="step-code">Rx ← MBR</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>Registro a Memoria</h4>
+                                <div class="complexity-badge medium">Medio</div>
+                            </div>
+                            <div class="instruction-code">MOV [dirección], Ry</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Pasos 4-5:</span>
+                                    <span class="step-code">Obtener segundo byte</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 6:</span>
+                                    <span class="step-code">MAR ← MBR</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 7:</span>
+                                    <span class="step-code">MBR ← Ry</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 8:</span>
+                                    <span class="step-code">write(Memoria[MAR]) ← MBR</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>Inmediato</h4>
+                                <div class="complexity-badge simple">Simple</div>
+                            </div>
+                            <div class="instruction-code">MOV Rx, [inmediato]</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Pasos 4-5:</span>
+                                    <span class="step-code">Obtener segundo byte</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 6:</span>
+                                    <span class="step-code">Rx ← MBR</span>
+                                </div>
+                            </div>
+                            <div class="instruction-note">
+                                <span class="note-icon">💡</span>
+                                Destino puede ser MY o BL
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>Indirecto</h4>
+                                <div class="complexity-badge complex">Complejo</div>
+                            </div>
+                            <div class="instruction-code">MOV Rx, [Ry]</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Paso 6:</span>
+                                    <span class="step-code">MAR ← BL</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 7:</span>
+                                    <span class="step-code">MBR ← read(Memoria[MAR])</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 8:</span>
+                                    <span class="step-code">Rx ← MBR</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ARITMÉTICA -->
+                <div class="category-card arithmetic-category">
+                    <div class="category-header">
+                        <div class="category-icon">🧮</div>
+                        <div class="category-info">
+                            <h3 class="category-title">Aritmética</h3>
+                            <span class="category-subtitle">ADD, SUB, CMP - Operaciones ALU</span>
+                        </div>
+                        <div class="category-badge">4 tipos</div>
+                    </div>
+                    
+                    <div class="alu-info">
+                        <div class="alu-note">
+                            <span class="note-icon">⚠️</span>
+                            <strong>CMP:</strong> es igual a SUB sin guardar resultado
+                        </div>
+                    </div>
+                    
+                    <div class="instruction-types">
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>Entre Registros</h4>
+                                <div class="complexity-badge simple">Simple</div>
+                            </div>
+                            <div class="instruction-code">ADD Rx, Ry</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Paso 4:</span>
+                                    <span class="step-code">Rx ← opALU Ry ; update(Flags)</span>
+                                </div>
+                            </div>
+                            <div class="flags-indicator">
+                                <span>Actualiza: </span>
+                                <span class="flag">Z</span>
+                                <span class="flag">C</span>
+                                <span class="flag">S</span>
+                                <span class="flag">O</span>
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>Directo</h4>
+                                <div class="complexity-badge medium">Medio</div>
+                            </div>
+                            <div class="instruction-code">ADD Rx, [dirección]</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Pasos 4-5:</span>
+                                    <span class="step-code">Obtener segundo byte</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 6:</span>
+                                    <span class="step-code">MAR ← MBR</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 7:</span>
+                                    <span class="step-code">MBR ← read(Memoria[MAR])</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 8:</span>
+                                    <span class="step-code">Rx ← opALU MBR ; update(Flags)</span>
+                                </div>
+                            </div>
+                            <div class="instruction-note">
+                                <span class="note-icon">🔄</span>
+                                También funciona en sentido inverso
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>Inmediato</h4>
+                                <div class="complexity-badge simple">Simple</div>
+                            </div>
+                            <div class="instruction-code">ADD Rx, [inmediato]</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Pasos 4-5:</span>
+                                    <span class="step-code">Obtener segundo byte</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 6:</span>
+                                    <span class="step-code">Rx ← opALU MBR ; update(Flags)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>Indirecto</h4>
+                                <div class="complexity-badge complex">Complejo</div>
+                            </div>
+                            <div class="instruction-code">ADD Rx, [Ry]</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Paso 6:</span>
+                                    <span class="step-code">MAR ← BL</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 7:</span>
+                                    <span class="step-code">MBR ← read(Memoria[MAR])</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 8:</span>
+                                    <span class="step-code">Rx ← opALU MBR ; update(Flags)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CONTROL -->
+                <div class="category-card control-category">
+                    <div class="category-header">
+                        <div class="category-icon">🎮</div>
+                        <div class="category-info">
+                            <h3 class="category-title">Control</h3>
+                            <span class="category-subtitle">JMP, CALL, RET - Flujo del programa</span>
+                        </div>
+                        <div class="category-badge">6 tipos</div>
+                    </div>
+                    
+                    <div class="instruction-types">
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>JMP - Salto Incondicional</h4>
+                                <div class="complexity-badge simple">Simple</div>
+                            </div>
+                            <div class="instruction-code">JMP dirección</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Pasos 4-5:</span>
+                                    <span class="step-code">Obtener segundo byte</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 6:</span>
+                                    <span class="step-code">IP ← MBR</span>
+                                </div>
+                            </div>
+                            <div class="jump-visual">
+                                <div class="pc-flow">PC → Nueva dirección</div>
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>Saltos Condicionales</h4>
+                                <div class="complexity-badge medium">Medio</div>
+                            </div>
+                            <div class="conditional-jumps">
+                                <div class="conditional-item">
+                                    <div class="instruction-code">JZ dirección</div>
+                                    <div class="condition">Si Z = 1 (es igual) → IP ← MBR</div>
+                                </div>
+                                <div class="conditional-item">
+                                    <div class="instruction-code">JC dirección</div>
+                                    <div class="condition">Si C = 1 (es menor) → IP ← MBR</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>HLT - Detener CPU</h4>
+                                <div class="complexity-badge simple">Simple</div>
+                            </div>
+                            <div class="instruction-code">HLT</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Paso 4:</span>
+                                    <span class="step-code">Detiene CPU</span>
+                                </div>
+                            </div>
+                            <div class="halt-indicator">
+                                <span class="halt-icon">🛑</span>
+                                <span>Fin de programa</span>
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>CALL - Llamada a Subrutina</h4>
+                                <div class="complexity-badge complex">Complejo</div>
+                            </div>
+                            <div class="instruction-code">CALL dirección</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Pasos 4-5:</span>
+                                    <span class="step-code">Obtener segundo byte</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 6:</span>
+                                    <span class="step-code">SP ← SP − 1</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 7:</span>
+                                    <span class="step-code">MAR ← SP</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 8:</span>
+                                    <span class="step-code">MBR ← IP</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 9:</span>
+                                    <span class="step-code">write(Memoria[MAR]) ← MBR</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 10:</span>
+                                    <span class="step-code">IP ← segundo byte</span>
+                                </div>
+                            </div>
+                            <div class="stack-visual">
+                                <div class="stack-item">Stack: Guardar IP actual</div>
+                                <div class="stack-arrow">↓</div>
+                                <div class="stack-item">Saltar a subrutina</div>
+                            </div>
+                        </div>
+                        
+                        <div class="instruction-type">
+                            <div class="instruction-header">
+                                <h4>RET - Retorno de Subrutina</h4>
+                                <div class="complexity-badge medium">Medio</div>
+                            </div>
+                            <div class="instruction-code">RET</div>
+                            <div class="instruction-steps">
+                                <div class="step-row">
+                                    <span class="step-label">Paso 4:</span>
+                                    <span class="step-code">MAR ← SP</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 5:</span>
+                                    <span class="step-code">SP ← SP + 1</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 6:</span>
+                                    <span class="step-code">IR ← read(Memoria[MAR])</span>
+                                </div>
+                                <div class="step-row">
+                                    <span class="step-label">Paso 7:</span>
+                                    <span class="step-code">IP ← IR</span>
+                                </div>
+                            </div>
+                            <div class="stack-visual">
+                                <div class="stack-item">Stack: Recuperar IP</div>
+                                <div class="stack-arrow">↑</div>
+                                <div class="stack-item">Continuar ejecución</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer profesional -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Proyecto Educativo</h4>
+                <p>Material didáctico para arquitectura de computadores</p>
+            </div>
+            <div class="footer-section">
+                <h4>Tecnologías</h4>
+                <p>Vite • JavaScript • CSS3 • GitHub Pages</p>
+            </div>
+            <div class="footer-section">
+                <h4>Autor</h4>
+                <p>José Ruiz</p>
+                <a href="https://github.com/ruiz-jose/cicloinstruccion" target="_blank" class="footer-link">
+                    Ver código fuente
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Diagrama Ciclo de Instrucción. Uso educativo.</p>
+        </div>
+    </footer>
     
     <script type="module" src="/src/main.js"></script>
 </body>
