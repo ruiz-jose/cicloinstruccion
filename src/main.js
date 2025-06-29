@@ -92,7 +92,7 @@ const Utils = {
 };
 
 /**
- * Sistema de navegación mejorado
+ * Sistema de navegación mejorada
  */
 class NavigationSystem {
     constructor() {
@@ -1012,3 +1012,298 @@ const dynamicStyles = `
 const styleSheet = document.createElement('style');
 styleSheet.textContent = dynamicStyles;
 document.head.appendChild(styleSheet);
+
+// ===============================
+// SIMULADOR INTERACTIVO
+// ===============================
+
+class CPUSimulator {
+    constructor() {
+        this.currentStep = 0;
+        this.totalSteps = 6;
+        this.isRunning = false;
+        this.isPaused = false;
+        this.currentInstruction = 'mov-reg';
+        this.stepInterval = null;
+        
+        this.instructions = {
+            'mov-reg': {
+                steps: [
+                    { title: 'Búsqueda de Instrucción', description: 'PC apunta a la dirección de memoria', code: 'PC → MAR', components: ['pc', 'memory'] },
+                    { title: 'Lectura de Instrucción', description: 'Se lee la instrucción desde memoria', code: 'Memoria[MAR] → IR', components: ['memory', 'ir'] },
+                    { title: 'Decodificación', description: 'Se decodifica la instrucción MOV', code: 'IR → Decodificador', components: ['ir', 'decoder'] },
+                    { title: 'Lectura de Operando', description: 'Se lee el valor del registro fuente', code: 'Reg[src] → ALU', components: ['regA', 'alu'] },
+                    { title: 'Ejecución', description: 'Se transfiere el valor al registro destino', code: 'ALU → Reg[dst]', components: ['alu', 'regB'] },
+                    { title: 'Actualización PC', description: 'Se incrementa el contador de programa', code: 'PC = PC + 1', components: ['pc'] }
+                ]
+            },
+            'mov-mem': {
+                steps: [
+                    { title: 'Búsqueda de Instrucción', description: 'PC apunta a la dirección de memoria', code: 'PC → MAR', components: ['pc', 'memory'] },
+                    { title: 'Lectura de Instrucción', description: 'Se lee la instrucción desde memoria', code: 'Memoria[MAR] → IR', components: ['memory', 'ir'] },
+                    { title: 'Decodificación', description: 'Se decodifica la instrucción MOV con direccionamiento de memoria', code: 'IR → Decodificador', components: ['ir', 'decoder'] },
+                    { title: 'Cálculo de Dirección', description: 'Se calcula la dirección efectiva de memoria', code: 'Dirección → MAR', components: ['decoder', 'memory'] },
+                    { title: 'Lectura de Memoria', description: 'Se lee el valor desde la dirección calculada', code: 'Memoria[MAR] → MDR', components: ['memory', 'alu'] },
+                    { title: 'Escritura en Registro', description: 'Se almacena el valor en el registro destino', code: 'MDR → Reg[dst]', components: ['alu', 'regA'] },
+                    { title: 'Actualización PC', description: 'Se incrementa el contador de programa', code: 'PC = PC + 1', components: ['pc'] }
+                ]
+            },
+            'add': {
+                steps: [
+                    { title: 'Búsqueda de Instrucción', description: 'PC apunta a la dirección de memoria', code: 'PC → MAR', components: ['pc', 'memory'] },
+                    { title: 'Lectura de Instrucción', description: 'Se lee la instrucción desde memoria', code: 'Memoria[MAR] → IR', components: ['memory', 'ir'] },
+                    { title: 'Decodificación', description: 'Se decodifica la instrucción ADD', code: 'IR → Decodificador', components: ['ir', 'decoder'] },
+                    { title: 'Lectura Operandos', description: 'Se leen los valores de los registros fuente', code: 'Reg[A], Reg[B] → ALU', components: ['regA', 'regB', 'alu'] },
+                    { title: 'Operación Aritmética', description: 'La ALU realiza la suma', code: 'ALU: A + B', components: ['alu'] },
+                    { title: 'Escritura Resultado', description: 'Se almacena el resultado en el registro destino', code: 'ALU → Reg[dst]', components: ['alu', 'regA'] },
+                    { title: 'Actualización PC', description: 'Se incrementa el contador de programa', code: 'PC = PC + 1', components: ['pc'] }
+                ]
+            },
+            'jmp': {
+                steps: [
+                    { title: 'Búsqueda de Instrucción', description: 'PC apunta a la dirección de memoria', code: 'PC → MAR', components: ['pc', 'memory'] },
+                    { title: 'Lectura de Instrucción', description: 'Se lee la instrucción desde memoria', code: 'Memoria[MAR] → IR', components: ['memory', 'ir'] },
+                    { title: 'Decodificación', description: 'Se decodifica la instrucción JMP', code: 'IR → Decodificador', components: ['ir', 'decoder'] },
+                    { title: 'Cálculo Dirección', description: 'Se obtiene la dirección de salto', code: 'IR[operando] → Nueva_Dir', components: ['decoder'] },
+                    { title: 'Salto', description: 'Se modifica el PC con la nueva dirección', code: 'Nueva_Dir → PC', components: ['pc'] }
+                ]
+            },
+            'cmp': {
+                steps: [
+                    { title: 'Búsqueda de Instrucción', description: 'PC apunta a la dirección de memoria', code: 'PC → MAR', components: ['pc', 'memory'] },
+                    { title: 'Lectura de Instrucción', description: 'Se lee la instrucción desde memoria', code: 'Memoria[MAR] → IR', components: ['memory', 'ir'] },
+                    { title: 'Decodificación', description: 'Se decodifica la instrucción CMP', code: 'IR → Decodificador', components: ['ir', 'decoder'] },
+                    { title: 'Lectura Operandos', description: 'Se leen los valores a comparar', code: 'Reg[A], Reg[B] → ALU', components: ['regA', 'regB', 'alu'] },
+                    { title: 'Comparación', description: 'La ALU realiza la resta y actualiza flags', code: 'ALU: A - B → Flags', components: ['alu'] },
+                    { title: 'Actualización PC', description: 'Se incrementa el contador de programa', code: 'PC = PC + 1', components: ['pc'] }
+                ]
+            },
+            'call': {
+                steps: [
+                    { title: 'Búsqueda de Instrucción', description: 'PC apunta a la dirección de memoria', code: 'PC → MAR', components: ['pc', 'memory'] },
+                    { title: 'Lectura de Instrucción', description: 'Se lee la instrucción desde memoria', code: 'Memoria[MAR] → IR', components: ['memory', 'ir'] },
+                    { title: 'Decodificación', description: 'Se decodifica la instrucción CALL', code: 'IR → Decodificador', components: ['ir', 'decoder'] },
+                    { title: 'Guardar PC en Pila', description: 'Se guarda la dirección de retorno', code: 'PC → Pila[SP]', components: ['pc', 'memory'] },
+                    { title: 'Actualizar SP', description: 'Se decrementa el puntero de pila', code: 'SP = SP - 1', components: ['memory'] },
+                    { title: 'Salto a Subrutina', description: 'Se carga la dirección de la subrutina en PC', code: 'Dirección → PC', components: ['pc'] }
+                ]
+            }
+        };
+        
+        this.initializeSimulator();
+    }
+    
+    initializeSimulator() {
+        // Referencias a elementos DOM
+        this.elements = {
+            instructionSelect: document.getElementById('instructionSelect'),
+            playBtn: document.getElementById('playBtn'),
+            pauseBtn: document.getElementById('pauseBtn'),
+            stepBtn: document.getElementById('stepBtn'),
+            resetBtn: document.getElementById('resetBtn'),
+            currentStepEl: document.getElementById('currentStep'),
+            totalStepsEl: document.getElementById('totalSteps'),
+            progressFill: document.getElementById('progressFill'),
+            stepTitle: document.getElementById('stepTitle'),
+            stepDescription: document.getElementById('stepDescription'),
+            stepCode: document.getElementById('stepCode'),
+            memoryGrid: document.getElementById('memoryGrid')
+        };
+        
+        // Event listeners
+        this.elements.instructionSelect.addEventListener('change', (e) => {
+            this.currentInstruction = e.target.value;
+            this.reset();
+        });
+        
+        this.elements.playBtn.addEventListener('click', () => this.play());
+        this.elements.pauseBtn.addEventListener('click', () => this.pause());
+        this.elements.stepBtn.addEventListener('click', () => this.step());
+        this.elements.resetBtn.addEventListener('click', () => this.reset());
+        
+        // Inicializar memoria virtual
+        this.initializeMemory();
+        this.reset();
+    }
+    
+    initializeMemory() {
+        const memoryGrid = this.elements.memoryGrid;
+        memoryGrid.innerHTML = '';
+        
+        // Crear 64 celdas de memoria (8x8)
+        for (let i = 0; i < 64; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'memory-cell';
+            cell.innerHTML = `
+                <div class="memory-address">${(0x1000 + i).toString(16).toUpperCase()}</div>
+                <div class="memory-value">${(Math.random() * 255 | 0).toString(16).padStart(2, '0').toUpperCase()}</div>
+            `;
+            memoryGrid.appendChild(cell);
+        }
+    }
+    
+    play() {
+        if (this.isPaused) {
+            this.isPaused = false;
+        } else {
+            this.isRunning = true;
+        }
+        
+        this.elements.playBtn.disabled = true;
+        this.elements.pauseBtn.disabled = false;
+        
+        this.stepInterval = setInterval(() => {
+            this.step();
+            if (this.currentStep >= this.getCurrentSteps().length) {
+                this.pause();
+            }
+        }, 2000);
+    }
+    
+    pause() {
+        this.isRunning = false;
+        this.isPaused = true;
+        
+        if (this.stepInterval) {
+            clearInterval(this.stepInterval);
+            this.stepInterval = null;
+        }
+        
+        this.elements.playBtn.disabled = false;
+        this.elements.pauseBtn.disabled = true;
+    }
+    
+    step() {
+        const steps = this.getCurrentSteps();
+        if (this.currentStep < steps.length) {
+            this.executeStep(steps[this.currentStep]);
+            this.currentStep++;
+            this.updateUI();
+        }
+        
+        if (this.currentStep >= steps.length && this.isRunning) {
+            this.pause();
+        }
+    }
+    
+    reset() {
+        this.currentStep = 0;
+        this.isRunning = false;
+        this.isPaused = false;
+        
+        if (this.stepInterval) {
+            clearInterval(this.stepInterval);
+            this.stepInterval = null;
+        }
+        
+        this.elements.playBtn.disabled = false;
+        this.elements.pauseBtn.disabled = true;
+        
+        // Limpiar componentes activos
+        document.querySelectorAll('.cpu-component').forEach(comp => {
+            comp.classList.remove('active', 'completed');
+        });
+        
+        document.querySelectorAll('.register').forEach(reg => {
+            reg.classList.remove('highlight');
+        });
+        
+        document.querySelectorAll('.memory-cell').forEach(cell => {
+            cell.classList.remove('active');
+        });
+        
+        this.updateUI();
+    }
+    
+    getCurrentSteps() {
+        return this.instructions[this.currentInstruction].steps;
+    }
+    
+    executeStep(step) {
+        // Limpiar componentes anteriores
+        document.querySelectorAll('.cpu-component').forEach(comp => {
+            comp.classList.remove('active');
+        });
+        
+        // Activar componentes del paso actual
+        step.components.forEach(compId => {
+            const component = document.getElementById(compId);
+            if (component) {
+                component.classList.add('active');
+                
+                // Simular cambios en los valores
+                if (compId === 'ir' && step.title.includes('Lectura')) {
+                    component.querySelector('.component-value').textContent = 'MOV AX, BX';
+                } else if (compId === 'decoder' && step.title.includes('Decodificación')) {
+                    component.querySelector('.component-value').textContent = 'MOV';
+                } else if (compId === 'alu' && step.title.includes('Operación')) {
+                    component.querySelector('.component-value').textContent = '0x55';
+                } else if (compId === 'control') {
+                    component.querySelector('.component-value').textContent = 'EXEC';
+                }
+            }
+        });
+        
+        // Marcar pasos anteriores como completados
+        const steps = this.getCurrentSteps();
+        for (let i = 0; i < this.currentStep; i++) {
+            steps[i].components.forEach(compId => {
+                const component = document.getElementById(compId);
+                if (component) {
+                    component.classList.add('completed');
+                }
+            });
+        }
+        
+        // Activar celdas de memoria si es necesario
+        if (step.title.includes('Memoria') || step.title.includes('Lectura')) {
+            const memoryCells = document.querySelectorAll('.memory-cell');
+            if (memoryCells.length > 0) {
+                memoryCells[0].classList.add('active');
+            }
+        }
+        
+        // Destacar registros relevantes
+        if (step.title.includes('Registro') || step.components.includes('regA') || step.components.includes('regB')) {
+            const regAX = document.getElementById('reg-ax');
+            const regBX = document.getElementById('reg-bx');
+            if (regAX) regAX.classList.add('highlight');
+            if (regBX) regBX.classList.add('highlight');
+            
+            setTimeout(() => {
+                if (regAX) regAX.classList.remove('highlight');
+                if (regBX) regBX.classList.remove('highlight');
+            }, 1000);
+        }
+    }
+    
+    updateUI() {
+        const steps = this.getCurrentSteps();
+        const currentStepData = steps[Math.min(this.currentStep, steps.length - 1)];
+        
+        // Actualizar contador de pasos
+        this.elements.currentStepEl.textContent = this.currentStep + 1;
+        this.elements.totalStepsEl.textContent = steps.length;
+        
+        // Actualizar barra de progreso
+        const progress = ((this.currentStep + 1) / steps.length) * 100;
+        this.elements.progressFill.style.width = `${progress}%`;
+        
+        // Actualizar información del paso
+        if (currentStepData) {
+            this.elements.stepTitle.textContent = currentStepData.title;
+            this.elements.stepDescription.textContent = currentStepData.description;
+            this.elements.stepCode.textContent = currentStepData.code;
+        }
+        
+        // Habilitar/deshabilitar botones
+        this.elements.stepBtn.disabled = this.currentStep >= steps.length;
+    }
+}
+
+// Inicializar simulador cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('simulador')) {
+        window.cpuSimulator = new CPUSimulator();
+    }
+});

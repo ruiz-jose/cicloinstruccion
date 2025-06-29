@@ -25,6 +25,7 @@
                 <a href="#overview" class="nav-link">Resumen</a>
                 <a href="#phases" class="nav-link">Fases</a>
                 <a href="#instructions" class="nav-link">Instrucciones</a>
+                <a href="#simulador" class="nav-link">Simulador</a>
                 <a href="https://github.com/ruiz-jose/cicloinstruccion" class="nav-link github-link" target="_blank">
                     <span class="github-icon">⚡</span>
                     Código
@@ -837,6 +838,152 @@
                                 <div class="stack-item">Stack: Recuperar IP</div>
                                 <div class="stack-arrow">↑</div>
                                 <div class="stack-item">Continuar ejecución</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Simulador Interactivo -->
+        <section class="simulator-section" id="simulador">
+            <div class="container">
+                <h2 class="section-title">
+                    <span class="icon">🔧</span>
+                    Simulador Interactivo
+                </h2>
+                <p class="section-subtitle">
+                    Sigue paso a paso el ciclo de instrucción de la CPU
+                </p>
+                
+                <div class="simulator-container">
+                    <!-- Panel de controles -->
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label class="control-label">Tipo de Instrucción</label>
+                            <select class="instruction-select" id="instructionSelect">
+                                <option value="mov-reg">MOV (Registro a Registro)</option>
+                                <option value="mov-mem">MOV (Memoria a Registro)</option>
+                                <option value="add">ADD (Suma)</option>
+                                <option value="jmp">JMP (Salto Incondicional)</option>
+                                <option value="cmp">CMP (Comparación)</option>
+                                <option value="call">CALL (Llamada a Subrutina)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="control-group">
+                            <div class="step-counter">
+                                <div class="current-step" id="currentStep">1</div>
+                                <div class="total-steps">de <span id="totalSteps">6</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="control-buttons">
+                            <button class="sim-btn primary" id="playBtn">
+                                ▶️ Reproducir
+                            </button>
+                            <button class="sim-btn secondary" id="pauseBtn" disabled>
+                                ⏸️ Pausar
+                            </button>
+                            <button class="sim-btn secondary" id="stepBtn">
+                                ⏯️ Paso a Paso
+                            </button>
+                            <button class="sim-btn secondary" id="resetBtn">
+                                🔄 Reiniciar
+                            </button>
+                        </div>
+                        
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Área de visualización -->
+                    <div class="simulator-visual">
+                        <h3 style="margin-bottom: var(--space-6); color: var(--primary-300);">
+                            Diagrama de CPU
+                        </h3>
+                        
+                        <!-- Diagrama simplificado de CPU -->
+                        <div class="cpu-diagram" id="cpuDiagram">
+                            <div class="cpu-component" id="pc">
+                                <div class="component-label">PC</div>
+                                <div class="component-value" id="pcValue">0x1000</div>
+                            </div>
+                            <div class="cpu-component" id="memory">
+                                <div class="component-label">Memoria</div>
+                                <div class="component-value" id="memoryValue">---</div>
+                            </div>
+                            <div class="cpu-component" id="ir">
+                                <div class="component-label">IR</div>
+                                <div class="component-value" id="irValue">---</div>
+                            </div>
+                            <div class="cpu-component" id="decoder">
+                                <div class="component-label">Decodificador</div>
+                                <div class="component-value" id="decoderValue">---</div>
+                            </div>
+                            <div class="cpu-component" id="alu">
+                                <div class="component-label">ALU</div>
+                                <div class="component-value" id="aluValue">---</div>
+                            </div>
+                            <div class="cpu-component" id="regA">
+                                <div class="component-label">Reg A</div>
+                                <div class="component-value" id="regAValue">0x00</div>
+                            </div>
+                            <div class="cpu-component" id="regB">
+                                <div class="component-label">Reg B</div>
+                                <div class="component-value" id="regBValue">0x00</div>
+                            </div>
+                            <div class="cpu-component" id="control">
+                                <div class="component-label">Control</div>
+                                <div class="component-value" id="controlValue">IDLE</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Panel de registros -->
+                        <div class="registers-panel">
+                            <div class="register" id="reg-ax">
+                                <div class="register-name">AX</div>
+                                <div class="register-value">0x0000</div>
+                            </div>
+                            <div class="register" id="reg-bx">
+                                <div class="register-name">BX</div>
+                                <div class="register-value">0x0000</div>
+                            </div>
+                            <div class="register" id="reg-cx">
+                                <div class="register-name">CX</div>
+                                <div class="register-value">0x0000</div>
+                            </div>
+                            <div class="register" id="reg-dx">
+                                <div class="register-name">DX</div>
+                                <div class="register-value">0x0000</div>
+                            </div>
+                            <div class="register" id="reg-sp">
+                                <div class="register-name">SP</div>
+                                <div class="register-value">0xFFFF</div>
+                            </div>
+                            <div class="register" id="reg-bp">
+                                <div class="register-name">BP</div>
+                                <div class="register-value">0x0000</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Vista de memoria -->
+                        <div class="memory-view">
+                            <h4 style="color: var(--gray-300); margin-bottom: var(--space-3);">Memoria</h4>
+                            <div class="memory-grid" id="memoryGrid">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                        </div>
+                        
+                        <!-- Información del paso actual -->
+                        <div class="current-step-info">
+                            <div class="step-title" id="stepTitle">Búsqueda de Instrucción</div>
+                            <div class="step-description" id="stepDescription">
+                                El procesador lee la instrucción desde la dirección almacenada en el Contador de Programa (PC).
+                            </div>
+                            <div class="step-code" id="stepCode">
+                                PC → Dirección de Memoria → Instrucción
                             </div>
                         </div>
                     </div>

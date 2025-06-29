@@ -1530,15 +1530,368 @@ h1 {
     border-left-color: #3b82f6 !important;
 }
 
-/* Responsive para grupos de pasos */
-@media (max-width: 768px) {
-    .step-group-label {
-        padding: 10px 14px;
-        font-size: 0.85em;
+/* ===== SIMULADOR INTERACTIVO ===== */
+.simulator-section {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-12);
+    margin: var(--space-16) 0;
+    border: 1px solid var(--glass-border);
+}
+
+.simulator-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: var(--space-8);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.simulator-controls {
+    background: var(--glass-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    height: fit-content;
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+}
+
+.control-group {
+    margin-bottom: var(--space-6);
+}
+
+.control-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-300);
+    margin-bottom: var(--space-2);
+}
+
+.instruction-select {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    color: white;
+    font-family: var(--font-mono);
+}
+
+.control-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.sim-btn {
+    padding: var(--space-3) var(--space-4);
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+}
+
+.sim-btn.primary {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.sim-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--gray-300);
+    border: 1px solid var(--glass-border);
+}
+
+.sim-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.sim-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.step-counter {
+    background: rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    text-align: center;
+    font-family: var(--font-mono);
+}
+
+.current-step {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-400);
+}
+
+.total-steps {
+    font-size: 0.875rem;
+    color: var(--gray-400);
+}
+
+/* Área de visualización del simulador */
+.simulator-visual {
+    background: var(--glass-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    min-height: 600px;
+}
+
+.cpu-diagram {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: var(--space-4);
+    height: 400px;
+}
+
+.cpu-component {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.cpu-component.active {
+    border-color: var(--warning);
+    background: rgba(251, 191, 36, 0.1);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+    transform: scale(1.05);
+}
+
+.cpu-component.completed {
+    border-color: var(--success);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.component-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gray-300);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.component-value {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--primary-300);
+    margin-top: var(--space-2);
+}
+
+/* Conexiones animadas */
+.connection-line {
+    position: absolute;
+    background: var(--primary-500);
+    height: 2px;
+    transform-origin: left center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.connection-line.active {
+    opacity: 1;
+    animation: dataFlow 1s ease-in-out;
+}
+
+@keyframes dataFlow {
+    0% { 
+        width: 0;
+        box-shadow: none;
+    }
+    50% {
+        box-shadow: 0 0 10px var(--primary-500);
+    }
+    100% { 
+        width: 100%;
+        box-shadow: 0 0 5px var(--primary-500);
+    }
+}
+
+.registers-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+}
+
+.register {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    text-align: center;
+}
+
+.register-name {
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    margin-bottom: var(--space-1);
+}
+
+.register-value {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-300);
+}
+
+.register.highlight {
+    border-color: var(--warning);
+    background: rgba(251, 191, 36, 0.1);
+    animation: registerGlow 0.5s ease-in-out;
+}
+
+@keyframes registerGlow {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 15px rgba(251, 191, 36, 0.4); }
+}
+
+/* Visualización de memoria */
+.memory-view {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    margin-top: var(--space-6);
+}
+
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: var(--space-1);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.memory-cell {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--space-1);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s ease;
+}
+
+.memory-cell.active {
+    background: rgba(251, 191, 36, 0.2);
+    border-color: var(--warning);
+    color: var(--warning);
+}
+
+.memory-address {
+    color: var(--gray-500);
+    font-size: 0.6rem;
+}
+
+.memory-value {
+    color: var(--gray-300);
+    font-weight: 600;
+}
+
+/* Progreso del simulador */
+.progress-bar {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-xl);
+    height: 8px;
+    margin: var(--space-4) 0;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: var(--gradient-primary);
+    height: 100%;
+    border-radius: var(--radius-xl);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+/* Información del paso actual */
+.current-step-info {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    margin-top: var(--space-4);
+    border-left: 4px solid var(--primary-500);
+}
+
+.step-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--primary-300);
+    margin-bottom: var(--space-2);
+}
+
+.step-description {
+    color: var(--gray-300);
+    line-height: 1.6;
+}
+
+.step-code {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    margin-top: var(--space-3);
+    font-family: var(--font-mono);
+    color: var(--warning);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+/* Responsive del simulador */
+@media (max-width: 1024px) {
+    .simulator-container {
+        grid-template-columns: 1fr;
     }
     
-    .secondary-step {
-        padding: 10px 14px !important;
-        font-size: 0.8em;
+    .simulator-controls {
+        order: 2;
+    }
+    
+    .cpu-diagram {
+        grid-template-columns: repeat(2, 1fr);
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .simulator-section {
+        padding: var(--space-6);
+    }
+    
+    .registers-panel {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .memory-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .control-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .sim-btn {
+        flex: 1;
+        min-width: 120px;
     }
 }
