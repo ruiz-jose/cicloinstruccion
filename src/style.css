@@ -1452,106 +1452,93 @@ h1 {
     font-family: 'Courier New', monospace;
 }
 
-/* Responsive Design */
+/* Grupos de pasos especiales */
+.step-group {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 12px;
+    margin: 12px 0;
+    padding: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.step-group:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+}
+
+.step-group-label {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.group-icon {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+.secondary-step {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-left: 3px solid #3b82f6 !important;
+    margin: 0 !important;
+    padding: 12px 16px !important;
+    border-radius: 0 !important;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 0.85em;
+    transition: all 0.3s ease;
+    list-style: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.secondary-step:last-child {
+    border-bottom: none;
+}
+
+.secondary-step:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-left-color: #60a5fa !important;
+    border-left-width: 4px !important;
+    padding-left: 15px !important;
+}
+
+.secondary-step strong {
+    color: #60a5fa;
+    font-weight: 600;
+}
+
+/* Variaciones de colores para diferentes tipos */
+.secondary-fetch {
+    background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.25);
+}
+
+.secondary-fetch .step-group-label {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.secondary-fetch .secondary-step {
+    border-left-color: #3b82f6 !important;
+}
+
+/* Responsive para grupos de pasos */
 @media (max-width: 768px) {
-    .container {
-        padding: 20px;
-        margin: 10px;
+    .step-group-label {
+        padding: 10px 14px;
+        font-size: 0.85em;
     }
     
-    h1 {
-        font-size: 2em;
-        margin-bottom: 30px;
-    }
-    
-    .phase {
-        font-size: 1.1em;
-        padding: 20px 25px;
-    }
-    
-    .decodificar {
-        clip-path: none;
-        padding: 25px 35px;
-    }
-    
-    .instruction-categories {
-        grid-template-columns: 1fr;
-    }
-    
-    .steps-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .category-card {
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-    
-    .container {
-        padding: 15px;
-        border-radius: 15px;
-    }
-    
-    h1 {
-        font-size: 1.8em;
-    }
-    
-    .phase {
-        font-size: 1em;
-        padding: 15px 20px;
-    }
-    
-    .phase-number {
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
-        font-size: 1em;
-        margin-right: 10px;
-    }
-    
-    .flow-arrow {
-        font-size: 2em;
-    }
-}
-
-/* Mejoras de accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* Focus states para accesibilidad */
-.phase:focus,
-.step-item:focus,
-.category-card:focus {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
-}
-
-/* Print styles */
-@media print {
-    body {
-        background: white;
-        color: black;
-    }
-    
-    .container {
-        background: white;
-        box-shadow: none;
-        border: 1px solid #ccc;
-    }
-    
-    .phase {
-        background: #f0f0f0 !important;
-        color: black !important;
-        border: 1px solid #ccc !important;
+    .secondary-step {
+        padding: 10px 14px !important;
+        font-size: 0.8em;
     }
 }

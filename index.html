@@ -256,10 +256,14 @@
                         <h4>Directo a Registro</h4>
                         <div class="instruction-code">MOV Rx, [dirección]</div>
                         <ul class="instruction-steps">
-                            <li><strong>Paso 4:</strong> MAR ← IP </li>
-                            <li><strong>Paso 5:</strong> MBR ← read(Memoria[MAR]); IP ← IP + 1 </li>
-                            <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
-                            <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
+                            <div class="step-group secondary-fetch">
+                                <div class="step-group-label">
+                                    <span class="group-icon">📥</span>
+                                    <strong>Pasos 4-5:</strong> Obtener segundo byte de memoria
+                                </div>
+                                <li class="secondary-step"><strong>Paso 4:</strong> MAR ← IP</li>
+                                <li class="secondary-step"><strong>Paso 5:</strong> MBR ← read(Memoria[MAR]); IP ← IP + 1</li>
+                            </div>
                             <li><strong>Paso 6:</strong> MAR ← MBR</li>
                             <li><strong>Paso 7:</strong> MBR ← read(Memoria[MAR])</li>
                             <li><strong>Paso 8:</strong> Rx ← MBR</li>
@@ -270,7 +274,14 @@
                         <h4>Registro a Memoria</h4>
                         <div class="instruction-code">MOV [dirección], Ry</div>
                         <ul class="instruction-steps">
-                            <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
+                            <div class="step-group secondary-fetch">
+                                <div class="step-group-label">
+                                    <span class="group-icon">📥</span>
+                                    <strong>Pasos 4-5:</strong> Obtener segundo byte de memoria
+                                </div>
+                                <li class="secondary-step"><strong>Paso 4:</strong> MAR ← IP</li>
+                                <li class="secondary-step"><strong>Paso 5:</strong> MBR ← read(Memoria[MAR]); IP ← IP + 1</li>
+                            </div>
                             <li><strong>Paso 6:</strong> MAR ← MBR</li>
                             <li><strong>Paso 7:</strong> MBR ← Ry</li>
                             <li><strong>Paso 8:</strong> write(Memoria[MAR]) ← MBR</li>
@@ -281,7 +292,14 @@
                         <h4>Inmediato</h4>
                         <div class="instruction-code">MOV Rx, [inmediato]</div>
                         <ul class="instruction-steps">
-                            <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
+                            <div class="step-group secondary-fetch">
+                                <div class="step-group-label">
+                                    <span class="group-icon">📥</span>
+                                    <strong>Pasos 4-5:</strong> Obtener segundo byte de memoria
+                                </div>
+                                <li class="secondary-step"><strong>Paso 4:</strong> MAR ← IP</li>
+                                <li class="secondary-step"><strong>Paso 5:</strong> MBR ← read(Memoria[MAR]); IP ← IP + 1</li>
+                            </div>
                             <li><strong>Paso 6:</strong> Rx ← MBR</li>
                         </ul>
                         <div class="note">Destino puede ser [M] o BL</div>
@@ -318,7 +336,14 @@
                         <h4>Directo</h4>
                         <div class="instruction-code">ADD Rx, [dirección]</div>
                         <ul class="instruction-steps">
-                            <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
+                            <div class="step-group secondary-fetch">
+                                <div class="step-group-label">
+                                    <span class="group-icon">📥</span>
+                                    <strong>Pasos 4-5:</strong> Obtener segundo byte de memoria
+                                </div>
+                                <li class="secondary-step"><strong>Paso 4:</strong> MAR ← IP</li>
+                                <li class="secondary-step"><strong>Paso 5:</strong> MBR ← read(Memoria[MAR]); IP ← IP + 1</li>
+                            </div>
                             <li><strong>Paso 6:</strong> MAR ← MBR</li>
                             <li><strong>Paso 7:</strong> MBR ← read(Memoria[MAR])</li>
                             <li><strong>Paso 8:</strong> Rx ← Rx opALU MBR ; update(Flags)</li>
@@ -330,7 +355,14 @@
                         <h4>Inmediato</h4>
                         <div class="instruction-code">ADD Rx, [inmediato]</div>
                         <ul class="instruction-steps">
-                            <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
+                            <div class="step-group secondary-fetch">
+                                <div class="step-group-label">
+                                    <span class="group-icon">📥</span>
+                                    <strong>Pasos 4-5:</strong> Obtener segundo byte de memoria
+                                </div>
+                                <li class="secondary-step"><strong>Paso 4:</strong> MAR ← IP</li>
+                                <li class="secondary-step"><strong>Paso 5:</strong> MBR ← read(Memoria[MAR]); IP ← IP + 1</li>
+                            </div>
                             <li><strong>Paso 6:</strong> Rx ← opALU MBR ; update(Flags)</li>
                         </ul>
                         <div class="note">Destino puede ser [M] o BL</div>
@@ -356,7 +388,14 @@
                     <div class="instruction-type">
                         <h4>JMP - Salto Incondicional</h4>
                         <ul class="instruction-steps">
-                            <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
+                            <div class="step-group secondary-fetch">
+                                <div class="step-group-label">
+                                    <span class="group-icon">📥</span>
+                                    <strong>Pasos 4-5:</strong> Obtener segundo byte de memoria
+                                </div>
+                                <li class="secondary-step"><strong>Paso 4:</strong> MAR ← IP</li>
+                                <li class="secondary-step"><strong>Paso 5:</strong> MBR ← read(Memoria[MAR]); IP ← IP + 1</li>
+                            </div>
                             <li><strong>Paso 6:</strong> IP ← MBR</li>
                         </ul>
                     </div>
@@ -383,7 +422,14 @@
                     <div class="instruction-type">
                         <h4>CALL - Llamada a Subrutina</h4>
                         <ul class="instruction-steps">
-                            <li><strong>Pasos 4-5:</strong> Obtener segundo byte de memoria</li>
+                            <div class="step-group secondary-fetch">
+                                <div class="step-group-label">
+                                    <span class="group-icon">📥</span>
+                                    <strong>Pasos 4-5:</strong> Obtener segundo byte de memoria
+                                </div>
+                                <li class="secondary-step"><strong>Paso 4:</strong> MAR ← IP</li>
+                                <li class="secondary-step"><strong>Paso 5:</strong> MBR ← read(Memoria[MAR]); IP ← IP + 1</li>
+                            </div>
                             <li><strong>Paso 6:</strong> SP ← SP − 1</li>
                             <li><strong>Paso 7:</strong> MAR ← SP</li>
                             <li><strong>Paso 8:</strong> MBR ← IP</li>
